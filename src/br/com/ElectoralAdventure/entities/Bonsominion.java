@@ -91,7 +91,7 @@ public class Bonsominion extends Entity {
 				// hit check
 				if (Game.random.nextInt(100) > 30) {
 					
-					Game.player.setLife(Game.player.getLife() - 1);
+					Game.player.setLife((int)Game.player.getLife() - 1);
 					System.out.println("tiche.. Tiche... TICHE!!!" + " Player life: " + Game.player.getLife());
 
 					if (Game.player.getLife() <= 0) {

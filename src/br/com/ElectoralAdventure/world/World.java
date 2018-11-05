@@ -44,7 +44,10 @@ public class World {
 						tiles[xx + (yy * WIDTH)] = new WallTile(xx * 16, yy * 16, Tile.TILE_WALL);
 					} else if (currentPixel == 0xFF00FF00) {
 						// BEER
-						Game.entities.add(new Beer(xx * 16, yy * 16, 16, 16, Entity.BEER_EN));
+						Beer beer = new Beer(xx * 16, yy * 16, 16, 16, Entity.BEER_EN);
+						beer.setMask(6, 5, 7, 7);
+						Game.entities.add(beer);
+						Game.beers.add(beer);
 					} else if (currentPixel == 0xFFFFFF00) {
 						// AMMUNITION
 						Game.entities.add(new Ammunition(xx * 16, yy * 16, 16, 16, Entity.AMMUNITION_EN));

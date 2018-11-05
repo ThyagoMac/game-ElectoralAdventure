@@ -14,10 +14,12 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import br.com.ElectoralAdventure.entities.Beer;
 import br.com.ElectoralAdventure.entities.Bonsominion;
 import br.com.ElectoralAdventure.entities.Entity;
 import br.com.ElectoralAdventure.entities.Player;
 import br.com.ElectoralAdventure.graphics.SpriteSheet;
+import br.com.ElectoralAdventure.graphics.UserInterface;
 import br.com.ElectoralAdventure.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener {
@@ -29,10 +31,11 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private boolean isRunning;
 	private final static int WIDTH = 260;
 	private final static int HEIGHT = 140;
-	private final int SCALE = 4;
+	private final int SCALE = 5;
 
 	private BufferedImage image;
 
+	public static List<Beer> beers;
 	public static List<Entity> entities;
 	//mthod follow3
 	public static List<Bonsominion> bonsominions;
@@ -41,6 +44,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private static World world;
 	public static Player player;
 	public static Random random;
+	
+	public UserInterface ui;
 
 	public Game() {
 		random = new Random();
@@ -49,10 +54,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		initFrame();
 
 		// init entities
+		ui = new UserInterface();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
 		//mthod follow3
 		bonsominions = new ArrayList<Bonsominion>();
+		beers = new ArrayList<Beer>();
 		spriteSheet = new SpriteSheet("/spritesheet.png");
 		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16)); 
 		world = new World("/map01.png");
@@ -115,6 +122,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			e.render(g);
 		}
 
+		ui.render(g);
+		
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);

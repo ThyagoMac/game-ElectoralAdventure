@@ -13,7 +13,7 @@ public class Player extends Entity {
 	private double speed = 1;
 	public int right_direction = 0, left_direction = 1, up_direction = 2, down_direction = 3;
 	public int direction = down_direction;
-	private int life = 100;
+	private double life = 100, maxLife = 100;
 
 	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
 	private boolean moved = false;
@@ -60,7 +60,7 @@ public class Player extends Entity {
 		if (right && World.isFree((int) (x + speed), this.getY())) {
 			moved = true;
 			direction = right_direction;
-			x += speed; //x += speed;
+			x += speed; // x += speed;
 		} else if (left && World.isFree((int) (x - speed), this.getY())) {
 			moved = true;
 			direction = left_direction;
@@ -87,6 +87,7 @@ public class Player extends Entity {
 				}
 			}
 		}
+		this.checkCollisionBeer();
 
 		Camera.x = Camera.clamp(this.getX() - (Game.getWIDTH() / 2), 0, (World.WIDTH * 16) - Game.getWIDTH());
 		Camera.y = Camera.clamp(this.getY() - (Game.getHEIGHT() / 2), 0, (World.HEIGHT * 16) - Game.getHEIGHT());
@@ -96,6 +97,25 @@ public class Player extends Entity {
 
 //		Camera.setX( (this.getX() - (Game.getWIDTH()/2)));
 //		Camera.setY( (this.getY()- (Game.getHEIGHT()/2)));
+	}
+
+	private void checkCollisionBeer() {
+		for (int i = 0; i < Game.beers.size(); i++) {
+			Beer beerAtual = Game.beers.get(i);
+			//if (e instanceof Beer) { <---<< foi posto em uma lista só de beers... desnecessario
+				if (Entity.isColliding(this, beerAtual)) {
+					if (life >= 92) {
+						life = 100;
+					} else {
+						life += 8;
+					}
+					Game.beers.remove(beerAtual);
+					Game.entities.remove(beerAtual);
+				}
+			//}
+
+		}
+
 	}
 
 	public void render(Graphics g) {
@@ -150,12 +170,16 @@ public class Player extends Entity {
 		this.down = down;
 	}
 
-	public int getLife() {
+	public double getLife() {
 		return life;
 	}
 
 	public void setLife(int life) {
 		this.life = life;
 	}
-	
+
+	public double getMaxLife() {
+		return maxLife;
+	}
+
 }
