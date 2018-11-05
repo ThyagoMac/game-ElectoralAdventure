@@ -13,7 +13,7 @@ public class Entity {
 	public static BufferedImage AMMUNITION_EN = Game.spriteSheet.getSprite(128, 16, 16, 16);
 	public static BufferedImage GUN_EN = Game.spriteSheet.getSprite(144, 16, 16, 16);
 	
-	protected int x, y;
+	protected double x, y;
 	private int width, height;
 
 	private BufferedImage sprite;
@@ -34,11 +34,11 @@ public class Entity {
 	}
 
 	public int getX() {
-		return this.x;
+		return (int)this.x;
 	}
 
 	public int getY() {
-		return this.y;
+		return (int)this.y;
 	}
 
 	public int getWidth() {

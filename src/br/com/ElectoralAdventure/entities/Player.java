@@ -10,9 +10,10 @@ import br.com.ElectoralAdventure.world.World;
 public class Player extends Entity {
 
 	public boolean right, left, up, down;
-	private double speed = 0.7;
+	private double speed = 1;
 	public int right_direction = 0, left_direction = 1, up_direction = 2, down_direction = 3;
 	public int direction = down_direction;
+	private int life = 100;
 
 	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
 	private boolean moved = false;
@@ -59,7 +60,7 @@ public class Player extends Entity {
 		if (right && World.isFree((int) (x + speed), this.getY())) {
 			moved = true;
 			direction = right_direction;
-			x += speed;
+			x += speed; //x += speed;
 		} else if (left && World.isFree((int) (x - speed), this.getY())) {
 			moved = true;
 			direction = left_direction;
@@ -149,4 +150,12 @@ public class Player extends Entity {
 		this.down = down;
 	}
 
+	public int getLife() {
+		return life;
+	}
+
+	public void setLife(int life) {
+		this.life = life;
+	}
+	
 }

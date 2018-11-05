@@ -57,7 +57,12 @@ public class World {
 						Game.player.setY(yy * 16);
 					} else if (currentPixel == 0xFFFF0000) {
 						// BONSOMINION
-						Game.entities.add(new Bonsominion(xx * 16, yy * 16, 16, 16, Entity.BONSOMINION_EN));
+						//mthod follow3
+						Bonsominion bon = new Bonsominion(xx * 16, yy * 16, 16, 16, Entity.BONSOMINION_EN);
+						Game.entities.add(bon);
+						Game.bonsominions.add(bon);
+						
+//						Game.entities.add(new Bonsominion(xx * 16, yy * 16, 16, 16, Entity.BONSOMINION_EN));
 					}
 				}
 			}

@@ -10,9 +10,11 @@ import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import javax.swing.JFrame;
 
+import br.com.ElectoralAdventure.entities.Bonsominion;
 import br.com.ElectoralAdventure.entities.Entity;
 import br.com.ElectoralAdventure.entities.Player;
 import br.com.ElectoralAdventure.graphics.SpriteSheet;
@@ -32,13 +34,16 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private BufferedImage image;
 
 	public static List<Entity> entities;
+	//mthod follow3
+	public static List<Bonsominion> bonsominions;
 	public static SpriteSheet spriteSheet;
 	
 	private static World world;
-	
 	public static Player player;
+	public static Random random;
 
 	public Game() {
+		random = new Random();
 		addKeyListener(this);
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		initFrame();
@@ -46,6 +51,8 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		// init entities
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 		entities = new ArrayList<Entity>();
+		//mthod follow3
+		bonsominions = new ArrayList<Bonsominion>();
 		spriteSheet = new SpriteSheet("/spritesheet.png");
 		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16)); 
 		world = new World("/map01.png");
@@ -122,6 +129,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		double delta = 0;
 		int frames = 0;
 		double timer = System.currentTimeMillis();
+		requestFocus();
 		while (isRunning) {
 			long now = System.nanoTime();
 			delta += (now - lastTime) / nanoSeconds;
