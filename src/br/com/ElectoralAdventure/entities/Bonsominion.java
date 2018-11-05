@@ -46,11 +46,11 @@ public class Bonsominion extends Entity {
 		}
 
 		for (int i = 0; i < upBonsominion.length; i++) {
-			upBonsominion[i] = Game.spriteSheet.getSprite(32, 32, 16, 16);
+			upBonsominion[i] = Game.spriteSheet.getSprite(0+(i*16), 48, 16, 16);
 		}
 
 		for (int i = 0; i < downBonsominion.length; i++) {
-			downBonsominion[i] = Game.spriteSheet.getSprite(48, 32, 16, 16);
+			downBonsominion[i] = Game.spriteSheet.getSprite(0+(i*16), 32, 16, 16);
 		}
 
 	}
