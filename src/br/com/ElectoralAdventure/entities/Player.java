@@ -2,7 +2,9 @@ package br.com.ElectoralAdventure.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
+import java.util.ArrayList;
 
+import br.com.ElectoralAdventure.graphics.SpriteSheet;
 import br.com.ElectoralAdventure.main.Game;
 import br.com.ElectoralAdventure.world.Camera;
 import br.com.ElectoralAdventure.world.World;
@@ -16,12 +18,16 @@ public class Player extends Entity {
 	private double life = 100, maxLife = 100;
 	private int ammunition = 0;
 
+	public boolean isDamage = false;
+	private int damageFrames = 0;
+
 	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
 	private boolean moved = false;
 	private BufferedImage[] rightPlayer;
 	private BufferedImage[] leftPlayer;
 	private BufferedImage[] upPlayer;
 	private BufferedImage[] downPlayer;
+	private BufferedImage[] damagePlayer;
 	// private BufferedImage[] stopPlayer;
 
 	public Player(int x, int y, int width, int height, BufferedImage sprite) {
@@ -31,6 +37,8 @@ public class Player extends Entity {
 		leftPlayer = new BufferedImage[4];
 		upPlayer = new BufferedImage[4];
 		downPlayer = new BufferedImage[4];
+		damagePlayer = new BufferedImage[1];
+
 		// stopPlayer = new BufferedImage[4];
 
 		for (int i = 0; i < rightPlayer.length; i++) {
@@ -49,6 +57,8 @@ public class Player extends Entity {
 		for (int i = 0; i < downPlayer.length; i++) {
 			downPlayer[i] = Game.spriteSheet.getSprite(80 + (i * 16), 0, 16, 16);
 		}
+
+		damagePlayer[0] = Game.spriteSheet.getSprite(0, 16, 16, 16);
 
 //		stopPlayer[0] = Game.spriteSheet.getSprite(32, 0, 16, 16);
 //		stopPlayer[1] = Game.spriteSheet.getSprite(48, 0, 16, 16);
@@ -90,6 +100,22 @@ public class Player extends Entity {
 		}
 		this.checkCollisionBeer();
 		this.checkCollisionAmmunition();
+		
+		if (isDamage) {
+			this.damageFrames++;
+			if (this.damageFrames == 8) {
+				this.damageFrames = 0;
+				isDamage = false;
+			}
+		}
+		
+		if (life <= 0) {
+			
+			Game.gameStart();
+			return;
+			//fecha o jogo
+			//System.exit(1);
+		}
 
 		Camera.x = Camera.clamp(this.getX() - (Game.getWIDTH() / 2), 0, (World.WIDTH * 16) - Game.getWIDTH());
 		Camera.y = Camera.clamp(this.getY() - (Game.getHEIGHT() / 2), 0, (World.HEIGHT * 16) - Game.getHEIGHT());
@@ -137,17 +163,21 @@ public class Player extends Entity {
 
 	public void render(Graphics g) {
 
-		if (direction == right_direction) {
-			g.drawImage(rightPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+		if (!isDamage) {
+			if (direction == right_direction) {
+				g.drawImage(rightPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 
-		} else if (direction == left_direction) {
-			g.drawImage(leftPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if (direction == left_direction) {
+				g.drawImage(leftPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 
-		} else if (direction == up_direction) {
-			g.drawImage(upPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if (direction == up_direction) {
+				g.drawImage(upPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 
-		} else if (direction == down_direction) {
-			g.drawImage(downPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if (direction == down_direction) {
+				g.drawImage(downPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			}
+		} else {
+			g.drawImage(damagePlayer[0], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 		}
 	}
 

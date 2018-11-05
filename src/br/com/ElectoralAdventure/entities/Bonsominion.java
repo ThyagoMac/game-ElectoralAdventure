@@ -86,20 +86,17 @@ public class Bonsominion extends Entity {
 					y -= speed;
 				}
 			} else {
-
-				
 				// hit check
 				if (Game.random.nextInt(100) > 30) {
 					
 					Game.player.setLife((int)Game.player.getLife() - 1);
+					Game.player.isDamage = true;
 					System.out.println("tiche.. Tiche... TICHE!!!" + " Player life: " + Game.player.getLife());
 
-					if (Game.player.getLife() <= 0) {
-						System.exit(1);
-					}
-				} else {
-					System.out.println("miss.. Miss... MISS!!!" + " Player life: " + Game.player.getLife());
-				}
+				} 
+//				else {
+//					System.out.println("miss.. Miss... MISS!!!" + " Player life: " + Game.player.getLife());
+//				}
 			}
 		}
 		// full follow + zombie % method

@@ -44,7 +44,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public static List<Bonsominion> bonsominions;
 	public static SpriteSheet spriteSheet;
 	
-	private static World world;
+	public static World world;
 	public static Player player;
 	public static Random random;
 	
@@ -59,6 +59,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		// init entities
 		ui = new UserInterface();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
+
+		//start game
+		gameStart();
+	}
+
+	public static void gameStart() {
 		entities = new ArrayList<Entity>();
 		//mthod follow3
 		bonsominions = new ArrayList<Bonsominion>();
@@ -68,6 +74,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16)); 
 		world = new World("/map01.png");
 		entities.add(player);
+		
 	}
 
 	private void initFrame() {
