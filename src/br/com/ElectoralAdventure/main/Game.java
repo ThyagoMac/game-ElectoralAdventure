@@ -71,7 +71,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	}
 
 	private void initFrame() {
-		frame = new JFrame("Electoral Adventure v0.2.5");
+		frame = new JFrame("Electoral Adventure v0.2.11");
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
