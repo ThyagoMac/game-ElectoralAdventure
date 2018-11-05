@@ -50,7 +50,10 @@ public class World {
 						Game.beers.add(beer);
 					} else if (currentPixel == 0xFFFFFF00) {
 						// AMMUNITION
-						Game.entities.add(new Ammunition(xx * 16, yy * 16, 16, 16, Entity.AMMUNITION_EN));
+						Ammunition ammunition = new Ammunition (xx * 16, yy * 16, 16, 16, Entity.AMMUNITION_EN);
+						ammunition.setMask(6, 8, 5, 3);
+						Game.entities.add(ammunition);
+						Game.munitions.add(ammunition);
 					} else if (currentPixel == 0xFF00FFFF) {
 						// GUN
 						Game.entities.add(new Gun(xx * 16, yy * 16, 16, 16, Entity.GUN_EN));

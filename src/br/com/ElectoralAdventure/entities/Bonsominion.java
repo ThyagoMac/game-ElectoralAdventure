@@ -10,7 +10,7 @@ import br.com.ElectoralAdventure.world.World;
 
 public class Bonsominion extends Entity {
 
-	private double speed = 0.7;
+	private double speed = 0.9;
 
 	private int maskX = 3;
 	private int maskY = 3;

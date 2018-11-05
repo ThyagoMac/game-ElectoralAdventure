@@ -14,6 +14,7 @@ public class Player extends Entity {
 	public int right_direction = 0, left_direction = 1, up_direction = 2, down_direction = 3;
 	public int direction = down_direction;
 	private double life = 100, maxLife = 100;
+	private int ammunition = 0;
 
 	private int frames = 0, maxFrames = 5, index = 0, maxIndex = 3;
 	private boolean moved = false;
@@ -88,6 +89,7 @@ public class Player extends Entity {
 			}
 		}
 		this.checkCollisionBeer();
+		this.checkCollisionAmmunition();
 
 		Camera.x = Camera.clamp(this.getX() - (Game.getWIDTH() / 2), 0, (World.WIDTH * 16) - Game.getWIDTH());
 		Camera.y = Camera.clamp(this.getY() - (Game.getHEIGHT() / 2), 0, (World.HEIGHT * 16) - Game.getHEIGHT());
@@ -99,20 +101,35 @@ public class Player extends Entity {
 //		Camera.setY( (this.getY()- (Game.getHEIGHT()/2)));
 	}
 
+	private void checkCollisionAmmunition() {
+		for (int i = 0; i < Game.munitions.size(); i++) {
+			Ammunition ammunitionAtual = Game.munitions.get(i);
+
+			if (Entity.isColliding(this, ammunitionAtual)) {
+
+				ammunition += 3;
+				System.out.println(ammunition);
+				Game.munitions.remove(ammunitionAtual);
+				Game.entities.remove(ammunitionAtual);
+			}
+		}
+	}
+
 	private void checkCollisionBeer() {
 		for (int i = 0; i < Game.beers.size(); i++) {
 			Beer beerAtual = Game.beers.get(i);
-			//if (e instanceof Beer) { <---<< foi posto em uma lista só de beers... desnecessario
-				if (Entity.isColliding(this, beerAtual)) {
-					if (life >= 92) {
-						life = 100;
-					} else {
-						life += 8;
-					}
-					Game.beers.remove(beerAtual);
-					Game.entities.remove(beerAtual);
+			// if (e instanceof Beer) { <---<< foi posto em uma lista só de beers...
+
+			if (Entity.isColliding(this, beerAtual)) {
+				if (life >= 92) {
+					life = 100;
+				} else {
+					life += 8;
 				}
-			//}
+				Game.beers.remove(beerAtual);
+				Game.entities.remove(beerAtual);
+			}
+			// }
 
 		}
 
@@ -180,6 +197,14 @@ public class Player extends Entity {
 
 	public double getMaxLife() {
 		return maxLife;
+	}
+
+	public int getAmmunition() {
+		return ammunition;
+	}
+
+	public void setAmmunition(int ammunition) {
+		this.ammunition = ammunition;
 	}
 
 }

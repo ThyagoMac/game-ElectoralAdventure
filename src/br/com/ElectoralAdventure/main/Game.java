@@ -3,6 +3,7 @@ package br.com.ElectoralAdventure.main;
 import java.awt.Canvas;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
@@ -14,6 +15,7 @@ import java.util.Random;
 
 import javax.swing.JFrame;
 
+import br.com.ElectoralAdventure.entities.Ammunition;
 import br.com.ElectoralAdventure.entities.Beer;
 import br.com.ElectoralAdventure.entities.Bonsominion;
 import br.com.ElectoralAdventure.entities.Entity;
@@ -36,6 +38,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	private BufferedImage image;
 
 	public static List<Beer> beers;
+	public static List<Ammunition> munitions;
 	public static List<Entity> entities;
 	//mthod follow3
 	public static List<Bonsominion> bonsominions;
@@ -60,6 +63,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		//mthod follow3
 		bonsominions = new ArrayList<Bonsominion>();
 		beers = new ArrayList<Beer>();
+		munitions = new ArrayList<Ammunition>();
 		spriteSheet = new SpriteSheet("/spritesheet.png");
 		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16)); 
 		world = new World("/map01.png");
@@ -127,6 +131,12 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font ("arial", Font.BOLD, 25));
+		g.drawString((int)Game.player.getLife() +" / "+ (int)Game.player.getMaxLife() , 100, 37);
+		g.setColor(Color.WHITE);
+		g.setFont(new Font("arial",Font.BOLD, 25));
+		g.drawString("Ammo: " + player.getAmmunition(), 26, 65);
 		bs.show();
 	}
 
