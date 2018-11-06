@@ -2,9 +2,7 @@ package br.com.ElectoralAdventure.entities;
 
 import java.awt.Graphics;
 import java.awt.image.BufferedImage;
-import java.util.ArrayList;
 
-import br.com.ElectoralAdventure.graphics.SpriteSheet;
 import br.com.ElectoralAdventure.main.Game;
 import br.com.ElectoralAdventure.world.Camera;
 import br.com.ElectoralAdventure.world.World;
@@ -17,6 +15,9 @@ public class Player extends Entity {
 	public int direction = down_direction;
 	private double life = 100, maxLife = 100;
 	private int ammunition = 0;
+	private boolean hasGun = false;
+
+	public boolean shoot = false;
 
 	public boolean isDamage = false;
 	private int damageFrames = 0;
@@ -100,7 +101,8 @@ public class Player extends Entity {
 		}
 		this.checkCollisionBeer();
 		this.checkCollisionAmmunition();
-		
+		this.checkCollisionGun();
+
 		if (isDamage) {
 			this.damageFrames++;
 			if (this.damageFrames == 8) {
@@ -108,13 +110,44 @@ public class Player extends Entity {
 				isDamage = false;
 			}
 		}
-		
+
+		if (shoot && hasGun && ammunition > 0) {
+			// cria bala e dispara.
+			this.shoot = false;
+			int dx = 0, dy = 0, px = 0, py = 0;
+
+			if (direction == right_direction) {
+				px = 16;
+				py = 7;
+				dx = 1;
+			} else if (direction == left_direction) {
+				px = -4;
+				py = 7;
+				dx = -1;
+
+			}
+
+			if (direction == up_direction) {
+				px = 11;
+				py = 4;
+				dy = -1;
+			} else if (direction == down_direction) {
+				px = 1;
+				py = 12;
+				dy = 1;
+			}
+
+			ammunition--;
+			Bullet bullet = new Bullet(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
+			Game.bullets.add(bullet);
+		}
+
 		if (life <= 0) {
-			
+
 			Game.gameStart();
 			return;
-			//fecha o jogo
-			//System.exit(1);
+			// fecha o jogo
+			// System.exit(1);
 		}
 
 		Camera.x = Camera.clamp(this.getX() - (Game.getWIDTH() / 2), 0, (World.WIDTH * 16) - Game.getWIDTH());
@@ -129,36 +162,44 @@ public class Player extends Entity {
 
 	private void checkCollisionAmmunition() {
 		for (int i = 0; i < Game.munitions.size(); i++) {
-			Ammunition ammunitionAtual = Game.munitions.get(i);
+			Ammunition currentAmmunition = Game.munitions.get(i);
 
-			if (Entity.isColliding(this, ammunitionAtual)) {
+			if (Entity.isColliding(this, currentAmmunition)) {
 
 				ammunition += 3;
-				System.out.println(ammunition);
-				Game.munitions.remove(ammunitionAtual);
-				Game.entities.remove(ammunitionAtual);
+				Game.munitions.remove(currentAmmunition);
+				Game.entities.remove(currentAmmunition);
 			}
 		}
 	}
 
 	private void checkCollisionBeer() {
 		for (int i = 0; i < Game.beers.size(); i++) {
-			Beer beerAtual = Game.beers.get(i);
-			// if (e instanceof Beer) { <---<< foi posto em uma lista só de beers...
+			Beer currendBeer = Game.beers.get(i);
 
-			if (Entity.isColliding(this, beerAtual)) {
+			if (Entity.isColliding(this, currendBeer)) {
 				if (life >= 92) {
 					life = 100;
 				} else {
 					life += 8;
 				}
-				Game.beers.remove(beerAtual);
-				Game.entities.remove(beerAtual);
+				Game.beers.remove(currendBeer);
+				Game.entities.remove(currendBeer);
 			}
-			// }
-
 		}
+	}
 
+	private void checkCollisionGun() {
+		for (int i = 0; i < Game.guns.size(); i++) {
+			Gun currentGun = Game.guns.get(i);
+
+			if (Entity.isColliding(this, currentGun)) {
+
+				hasGun = true;
+				Game.guns.remove(currentGun);
+				Game.entities.remove(currentGun);
+			}
+		}
 	}
 
 	public void render(Graphics g) {
@@ -166,15 +207,34 @@ public class Player extends Entity {
 		if (!isDamage) {
 			if (direction == right_direction) {
 				g.drawImage(rightPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if (hasGun) {
+					// arma direita
+					g.drawImage(Entity.GUN_RIGHT, this.getX() - Camera.getX() + 9, this.getY() - Camera.getY() + 2,
+							null);
+				}
 
 			} else if (direction == left_direction) {
 				g.drawImage(leftPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if (hasGun) {
+					// arma esquerda
+					g.drawImage(Entity.GUN_LEFT, this.getX() - Camera.getX() - 9, this.getY() - Camera.getY() + 2,
+							null);
+				}
 
 			} else if (direction == up_direction) {
 				g.drawImage(upPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if (hasGun) {
+					// arma up
+					g.drawImage(Entity.GUN_UP, this.getX() - Camera.getX() + 5, this.getY() - Camera.getY(), null);
+				}
 
 			} else if (direction == down_direction) {
 				g.drawImage(downPlayer[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+				if (hasGun) {
+					// arma down
+					g.drawImage(Entity.GUN_DOWN, this.getX() - Camera.getX() - 6, this.getY() - Camera.getY() + 7,
+							null);
+				}
 			}
 		} else {
 			g.drawImage(damagePlayer[0], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);

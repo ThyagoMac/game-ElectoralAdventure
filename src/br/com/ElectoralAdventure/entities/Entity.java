@@ -12,7 +12,11 @@ public class Entity {
 	public static BufferedImage BEER_EN = Game.spriteSheet.getSprite(128, 32, 16, 16);
 	public static BufferedImage BONSOMINION_EN = Game.spriteSheet.getSprite(32, 32, 16, 16);
 	public static BufferedImage AMMUNITION_EN = Game.spriteSheet.getSprite(128, 16, 16, 16);
-	public static BufferedImage GUN_EN = Game.spriteSheet.getSprite(144, 16, 16, 16);
+	public static BufferedImage GUN_EN = Game.spriteSheet.getSprite(16, 16, 16, 16);
+	public static BufferedImage GUN_RIGHT =Game.spriteSheet.getSprite(144, 16, 16, 16);
+	public static BufferedImage GUN_LEFT =Game.spriteSheet.getSprite(144, 32, 16, 16);
+	public static BufferedImage GUN_UP =Game.spriteSheet.getSprite(144, 48, 16, 16);
+	public static BufferedImage GUN_DOWN =Game.spriteSheet.getSprite(128, 48, 16, 16);
 
 	protected double x, y;
 	private int width, height;

@@ -45,7 +45,7 @@ public class World {
 					} else if (currentPixel == 0xFF00FF00) {
 						// BEER
 						Beer beer = new Beer(xx * 16, yy * 16, 16, 16, Entity.BEER_EN);
-						beer.setMask(6, 5, 7, 7);
+						beer.setMask(6, 5, 6, 6);
 						Game.entities.add(beer);
 						Game.beers.add(beer);
 					} else if (currentPixel == 0xFFFFFF00) {
@@ -56,7 +56,11 @@ public class World {
 						Game.munitions.add(ammunition);
 					} else if (currentPixel == 0xFF00FFFF) {
 						// GUN
-						Game.entities.add(new Gun(xx * 16, yy * 16, 16, 16, Entity.GUN_EN));
+						Gun gun = new Gun(xx * 16, yy * 16, 16, 16, Entity.GUN_EN);
+						gun.setMask(6, 6, 6, 5);
+						Game.entities.add(gun);
+						Game.guns.add(gun);
+						
 					} else if (currentPixel == 0xFF0000FF) {
 						// PLAYER
 						Game.player.setX(xx * 16);

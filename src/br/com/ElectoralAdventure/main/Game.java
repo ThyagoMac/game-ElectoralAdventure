@@ -18,7 +18,9 @@ import javax.swing.JFrame;
 import br.com.ElectoralAdventure.entities.Ammunition;
 import br.com.ElectoralAdventure.entities.Beer;
 import br.com.ElectoralAdventure.entities.Bonsominion;
+import br.com.ElectoralAdventure.entities.Bullet;
 import br.com.ElectoralAdventure.entities.Entity;
+import br.com.ElectoralAdventure.entities.Gun;
 import br.com.ElectoralAdventure.entities.Player;
 import br.com.ElectoralAdventure.graphics.SpriteSheet;
 import br.com.ElectoralAdventure.graphics.UserInterface;
@@ -37,17 +39,19 @@ public class Game extends Canvas implements Runnable, KeyListener {
 
 	private BufferedImage image;
 
+	// mthod follow3
+	public static List<Bonsominion> bonsominions;
+	public static List<Gun> guns;
 	public static List<Beer> beers;
 	public static List<Ammunition> munitions;
+	public static List<Bullet> bullets;
 	public static List<Entity> entities;
-	//mthod follow3
-	public static List<Bonsominion> bonsominions;
 	public static SpriteSheet spriteSheet;
-	
+
 	public static World world;
 	public static Player player;
 	public static Random random;
-	
+
 	public UserInterface ui;
 
 	public Game() {
@@ -60,21 +64,23 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		ui = new UserInterface();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
-		//start game
+		// start game
 		gameStart();
 	}
 
 	public static void gameStart() {
 		entities = new ArrayList<Entity>();
-		//mthod follow3
+		// mthod follow3
 		bonsominions = new ArrayList<Bonsominion>();
+		guns = new ArrayList<Gun>();
 		beers = new ArrayList<Beer>();
 		munitions = new ArrayList<Ammunition>();
+		bullets = new ArrayList<Bullet>();
 		spriteSheet = new SpriteSheet("/spritesheet.png");
-		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16)); 
+		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16));
 		world = new World("/map01.png");
 		entities.add(player);
-		
+
 	}
 
 	private void initFrame() {
@@ -113,6 +119,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			Entity e = entities.get(i);
 			e.tick();
 		}
+
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets.get(i).tick();
+		}
 	}
 
 	public void render() {
@@ -133,16 +143,20 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			e.render(g);
 		}
 
+		for (int i = 0; i < bullets.size(); i++) {
+			bullets.get(i).render(g);
+		}
+
 		ui.render(g);
-		
+
 		g.dispose();
 		g = bs.getDrawGraphics();
 		g.drawImage(image, 0, 0, WIDTH * SCALE, HEIGHT * SCALE, null);
 		g.setColor(Color.WHITE);
-		g.setFont(new Font ("arial", Font.BOLD, 25));
-		g.drawString((int)Game.player.getLife() +" / "+ (int)Game.player.getMaxLife() , 100, 37);
+		g.setFont(new Font("arial", Font.BOLD, 25));
+		g.drawString((int) Game.player.getLife() + " / " + (int) Game.player.getMaxLife(), 100, 37);
 		g.setColor(Color.WHITE);
-		g.setFont(new Font("arial",Font.BOLD, 25));
+		g.setFont(new Font("arial", Font.BOLD, 25));
 		g.drawString("Ammo: " + player.getAmmunition(), 26, 65);
 		bs.show();
 	}
@@ -191,7 +205,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 //		} else if (e.getKeyCode() == KeyEvent.VK_DOWN || e.getKeyCode() == KeyEvent.VK_S) {
 //			System.out.println("baixo");
 //		}
-		
+
 		if (e.getKeyCode() == 68 || e.getKeyCode() == 39) {
 			player.setRight(true);
 		} else if (e.getKeyCode() == 65 || e.getKeyCode() == 37) {
@@ -202,6 +216,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			player.setUp(true);
 		} else if (e.getKeyCode() == 83 || e.getKeyCode() == 40) {
 			player.setDown(true);
+		}
+
+		if (e.getKeyCode() == 88 || e.getKeyCode() == 74) {
+			player.shoot = true;
 		}
 
 	}
@@ -218,6 +236,10 @@ public class Game extends Canvas implements Runnable, KeyListener {
 			player.setUp(false);
 		} else if (e.getKeyCode() == 83 || e.getKeyCode() == 40) {
 			player.setDown(false);
+		}
+		
+		if (e.getKeyCode() == 88 || e.getKeyCode() == 74) {
+			player.shoot = false;
 		}
 	}
 
