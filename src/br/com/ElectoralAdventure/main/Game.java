@@ -26,7 +26,6 @@ import br.com.ElectoralAdventure.entities.Gun;
 import br.com.ElectoralAdventure.entities.Player;
 import br.com.ElectoralAdventure.graphics.SpriteSheet;
 import br.com.ElectoralAdventure.graphics.UserInterface;
-import br.com.ElectoralAdventure.world.Camera;
 import br.com.ElectoralAdventure.world.World;
 
 public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
@@ -40,6 +39,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private final static int WIDTH = 260;
 	private final static int HEIGHT = 140;
 	private final int SCALE = 5;
+
+	public static int curLevel = 1;
+
+	private int maxLevel = 3;
 
 	private BufferedImage image;
 
@@ -70,10 +73,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
 
 		// start game
-		gameStart();
+		gameStart(curLevel);
 	}
 
-	public static void gameStart() {
+	public static void gameStart(int level) {
 		entities = new ArrayList<Entity>();
 		// mthod follow3
 		bonsominions = new ArrayList<Bonsominion>();
@@ -83,7 +86,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		bullets = new ArrayList<Bullet>();
 		spriteSheet = new SpriteSheet("/spritesheet.png");
 		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16));
-		world = new World("/map01.png");
+		world = new World("/map0"+ level +".png");
 		entities.add(player);
 
 	}
@@ -127,6 +130,19 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		for (int i = 0; i < bullets.size(); i++) {
 			bullets.get(i).tick();
+		}
+
+		nextLevelCheck();
+	}
+
+	public void nextLevelCheck() {
+		if (bonsominions.size() == 0) {
+			curLevel++;
+			if (curLevel > maxLevel) {
+				curLevel = 1;
+				//gameStart();
+			}
+			gameStart(curLevel);
 		}
 	}
 
@@ -198,7 +214,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-//		System.out.println(e.getKeyCode());
+		System.out.println(e.getKeyCode());
 //		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 //			System.out.println("direita");
 //		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
@@ -223,7 +239,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.setDown(true);
 		}
 
-		if (e.getKeyCode() == 88 || e.getKeyCode() == 74) {
+		if (e.getKeyCode() == 88 || e.getKeyCode() == 17) {
 			player.shoot = true;
 		}
 
@@ -243,7 +259,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.setDown(false);
 		}
 
-		if (e.getKeyCode() == 88 || e.getKeyCode() == 74) {
+		if (e.getKeyCode() == 88 || e.getKeyCode() == 17) {
 			player.shoot = false;
 		}
 	}

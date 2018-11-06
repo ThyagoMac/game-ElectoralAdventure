@@ -169,16 +169,15 @@ public class Player extends Entity {
 				px = 1;
 				py = 12;
 			}
-			
 
-			ammunition++;
+			ammunition--;
 			Bullet bullet = new Bullet(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
 			Game.bullets.add(bullet);
 		}
 
 		if (life <= 0) {
 
-			Game.gameStart();
+			Game.gameStart(Game.curLevel);
 			return;
 			// fecha o jogo
 			// System.exit(1);

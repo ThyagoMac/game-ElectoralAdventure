@@ -17,17 +17,24 @@ public class Bonsominion extends Entity {
 	private int maskW = 10;
 	private int maskH = 12;
 
+	private boolean isDamage = false;
+
+	private int life = 3;
+
 	// animation part
 	private BufferedImage[] rightBonsominion;
 	private BufferedImage[] leftBonsominion;
 	private BufferedImage[] upBonsominion;
 	private BufferedImage[] downBonsominion;
+	private BufferedImage[] damageBonsominion;
 	private boolean moved = false;
 	private int frames = 0, maxFrames = 2, index = 0, maxIndex = 3;
 
 	public int right_direction = 0, left_direction = 1, up_direction = 2, down_direction = 3;
 	public int direction = down_direction;
 	////
+
+	private int damageFrames = 0;
 
 	public Bonsominion(int x, int y, int width, int height, BufferedImage sprite) {
 		super(x, y, width, height, sprite);
@@ -36,6 +43,7 @@ public class Bonsominion extends Entity {
 		leftBonsominion = new BufferedImage[4];
 		upBonsominion = new BufferedImage[4];
 		downBonsominion = new BufferedImage[4];
+		damageBonsominion = new BufferedImage[1];
 
 		for (int i = 0; i < rightBonsominion.length; i++) {
 			rightBonsominion[i] = Game.spriteSheet.getSprite(112 - (i * 16), 32, 16, 16);
@@ -46,12 +54,14 @@ public class Bonsominion extends Entity {
 		}
 
 		for (int i = 0; i < upBonsominion.length; i++) {
-			upBonsominion[i] = Game.spriteSheet.getSprite(0+(i*16), 48, 16, 16);
+			upBonsominion[i] = Game.spriteSheet.getSprite(0 + (i * 16), 48, 16, 16);
 		}
 
 		for (int i = 0; i < downBonsominion.length; i++) {
-			downBonsominion[i] = Game.spriteSheet.getSprite(0+(i*16), 32, 16, 16);
+			downBonsominion[i] = Game.spriteSheet.getSprite(0 + (i * 16), 32, 16, 16);
 		}
+
+		damageBonsominion[0] = Game.spriteSheet.getSprite(0, 64, 16, 16);
 
 	}
 
@@ -88,12 +98,12 @@ public class Bonsominion extends Entity {
 			} else {
 				// hit check
 				if (Game.random.nextInt(100) > 30) {
-					
-					Game.player.setLife((int)Game.player.getLife() - 1);
+
+					Game.player.setLife((int) Game.player.getLife() - 1);
 					Game.player.isDamage = true;
 					System.out.println("tiche.. Tiche... TICHE!!!" + " Player life: " + Game.player.getLife());
 
-				} 
+				}
 //				else {
 //					System.out.println("miss.. Miss... MISS!!!" + " Player life: " + Game.player.getLife());
 //				}
@@ -125,21 +135,53 @@ public class Bonsominion extends Entity {
 			}
 		}
 
+		if (isDamage) {
+			this.damageFrames++;
+			if (this.damageFrames == 8) {
+				this.damageFrames = 0;
+				isDamage = false;
+			}
+		}
+
+		collidionBullet();
+	}
+
+	private boolean collidionBullet() {
+
+		for (int i = 0; i < Game.bullets.size(); i++) {
+			Bullet b = Game.bullets.get(i);
+
+			if (Entity.isColliding(this, b)) {
+				life--;
+				isDamage = true;
+				Game.bullets.remove(b);
+				if (life == 0) {
+					Game.entities.remove(this);
+					Game.bonsominions.remove(this);
+				}
+			}
+		}
+		return false;
 	}
 
 	public void render(Graphics g) {
 
-		if (direction == right_direction) {
-			g.drawImage(rightBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+		if (!isDamage) {
 
-		} else if (direction == left_direction) {
-			g.drawImage(leftBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			if (direction == right_direction) {
+				g.drawImage(rightBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 
-		} else if (direction == up_direction) {
-			g.drawImage(upBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if (direction == left_direction) {
+				g.drawImage(leftBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 
-		} else if (direction == down_direction) {
-			g.drawImage(downBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			} else if (direction == up_direction) {
+				g.drawImage(upBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+
+			} else if (direction == down_direction) {
+				g.drawImage(downBonsominion[index], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
+			}
+		} else {
+			g.drawImage(damageBonsominion[0], this.getX() - Camera.getX(), this.getY() - Camera.getY(), null);
 		}
 	}
 

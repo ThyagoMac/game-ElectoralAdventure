@@ -33,7 +33,7 @@ public class Bullet extends Entity {
 	}
 
 	public void render(Graphics g) {
-		g.setColor(Color.GRAY);
+		g.setColor(Color.LIGHT_GRAY);
 		g.fillOval(this.getX() - Camera.x, this.getY() - Camera.y, this.getWidth(), this.getHeight());
 	}
 
