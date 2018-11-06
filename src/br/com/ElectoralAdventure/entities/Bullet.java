@@ -9,13 +9,13 @@ import br.com.ElectoralAdventure.world.Camera;
 
 public class Bullet extends Entity {
 
-	private int directionX;
-	private int directionY;
+	private double directionX;
+	private double directionY;
 	private double speed = 4;
 
 	private int currentBulletLife = 0, maxBulletLife = 50;
 
-	public Bullet(int x, int y, int width, int height, BufferedImage sprite, int directionX, int directionY) {
+	public Bullet(int x, int y, int width, int height, BufferedImage sprite, double directionX, double directionY) {
 		super(x, y, width, height, sprite);
 
 		this.directionX = directionX;

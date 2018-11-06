@@ -7,6 +7,8 @@ import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 import java.awt.image.BufferStrategy;
 import java.awt.image.BufferedImage;
 import java.util.ArrayList;
@@ -24,12 +26,14 @@ import br.com.ElectoralAdventure.entities.Gun;
 import br.com.ElectoralAdventure.entities.Player;
 import br.com.ElectoralAdventure.graphics.SpriteSheet;
 import br.com.ElectoralAdventure.graphics.UserInterface;
+import br.com.ElectoralAdventure.world.Camera;
 import br.com.ElectoralAdventure.world.World;
 
-public class Game extends Canvas implements Runnable, KeyListener {
+public class Game extends Canvas implements Runnable, KeyListener, MouseListener {
 
 	private static final long serialVersionUID = 1L;
 
+	private final String GAME_VERSION = "Electoral Adventure v0.3.13";
 	private static JFrame frame;
 	private Thread thread;
 	private boolean isRunning;
@@ -57,6 +61,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	public Game() {
 		random = new Random();
 		addKeyListener(this);
+		addMouseListener(this);
 		setPreferredSize(new Dimension(WIDTH * SCALE, HEIGHT * SCALE));
 		initFrame();
 
@@ -84,7 +89,7 @@ public class Game extends Canvas implements Runnable, KeyListener {
 	}
 
 	private void initFrame() {
-		frame = new JFrame("Electoral Adventure v0.2.11");
+		frame = new JFrame(GAME_VERSION);
 		frame.add(this);
 		frame.setResizable(false);
 		frame.pack();
@@ -237,10 +242,40 @@ public class Game extends Canvas implements Runnable, KeyListener {
 		} else if (e.getKeyCode() == 83 || e.getKeyCode() == 40) {
 			player.setDown(false);
 		}
-		
+
 		if (e.getKeyCode() == 88 || e.getKeyCode() == 74) {
 			player.shoot = false;
 		}
+	}
+
+	@Override
+	public void mouseClicked(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseEntered(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mouseExited(MouseEvent arg0) {
+		// TODO Auto-generated method stub
+
+	}
+
+	@Override
+	public void mousePressed(MouseEvent e) {
+		player.mouseShoot = true;
+		player.mx = (e.getX() / SCALE);
+		player.my = (e.getY() / SCALE);
+	}
+
+	@Override
+	public void mouseReleased(MouseEvent e) {
+		player.mouseShoot = false;
 	}
 
 	@Override
