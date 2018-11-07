@@ -10,7 +10,7 @@ import br.com.ElectoralAdventure.world.World;
 
 public class Bonsominion extends Entity {
 
-	private double speed = 0.9;
+	private double speed = 1.3;
 
 	private int maskX = 3;
 	private int maskY = 3;
@@ -101,7 +101,7 @@ public class Bonsominion extends Entity {
 
 					Game.player.setLife((int) Game.player.getLife() - 1);
 					Game.player.isDamage = true;
-					System.out.println("tiche.. Tiche... TICHE!!!" + " Player life: " + Game.player.getLife());
+					//System.out.println("tiche.. Tiche... TICHE!!!" + " Player life: " + Game.player.getLife());
 
 				}
 //				else {

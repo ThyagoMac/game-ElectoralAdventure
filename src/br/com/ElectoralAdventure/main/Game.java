@@ -5,6 +5,7 @@ import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import java.awt.event.MouseEvent;
@@ -39,6 +40,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	private final static int WIDTH = 260;
 	private final static int HEIGHT = 140;
 	private final int SCALE = 5;
+	private boolean restartGame = false;
 
 	public static int curLevel = 1;
 
@@ -60,6 +62,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static Random random;
 
 	public UserInterface ui;
+
+	public static String gameState = "NORMAL";
+	private boolean showMessageGameOver = true;
+	private int framesGameOver = 0;
 
 	public Game() {
 		random = new Random();
@@ -86,7 +92,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		bullets = new ArrayList<Bullet>();
 		spriteSheet = new SpriteSheet("/spritesheet.png");
 		player = new Player(25, 25, 16, 16, spriteSheet.getSprite(32, 0, 16, 16));
-		world = new World("/map0"+ level +".png");
+		world = new World("/map0" + level + ".png");
 		entities.add(player);
 
 	}
@@ -122,17 +128,37 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	}
 
 	public void tick() {
-		// tickando todos as entities
-		for (int i = 0; i < entities.size(); i++) {
-			Entity e = entities.get(i);
-			e.tick();
-		}
+		if (gameState == "NORMAL") {
+			// tickando todos as entities
+			for (int i = 0; i < entities.size(); i++) {
+				Entity e = entities.get(i);
+				e.tick();
+			}
 
-		for (int i = 0; i < bullets.size(); i++) {
-			bullets.get(i).tick();
-		}
+			for (int i = 0; i < bullets.size(); i++) {
+				bullets.get(i).tick();
+			}
 
-		nextLevelCheck();
+			nextLevelCheck();
+		}else if (gameState == "GAME_OVER") {
+			this.framesGameOver++;
+			if (this.framesGameOver == 30) {
+				this.framesGameOver=0;
+				if(showMessageGameOver)
+					this.showMessageGameOver = false;
+				else
+					this.showMessageGameOver = true;
+			}
+		}else if (gameState == "WIN") {
+			this.framesGameOver++;
+			if (this.framesGameOver == 30) {
+				this.framesGameOver=0;
+				if(showMessageGameOver)
+					this.showMessageGameOver = false;
+				else
+					this.showMessageGameOver = true;
+			}
+		}
 	}
 
 	public void nextLevelCheck() {
@@ -140,7 +166,8 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			curLevel++;
 			if (curLevel > maxLevel) {
 				curLevel = 1;
-				//gameStart();
+				gameState = "WIN";
+				// gameStart();
 			}
 			gameStart(curLevel);
 		}
@@ -179,6 +206,42 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		g.setColor(Color.WHITE);
 		g.setFont(new Font("arial", Font.BOLD, 25));
 		g.drawString("Ammo: " + player.getAmmunition(), 26, 65);
+
+		if (gameState == "GAME_OVER") {
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(new Color(0, 0, 0, 100));
+			g2.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("arial", Font.BOLD, 35));
+			g.drawString("PARECE QUE BONSONARO VENCEU AS ELEIÇÕES NÃO É MESMO?!?!?!", 50, 310);
+			g.setFont(new Font("arial", Font.BOLD, 35));
+			if (showMessageGameOver)
+				g.drawString(">Pressione 'ENTER' para tentar novamente.<", 260, 510);
+
+			if (restartGame) {
+				gameStart(curLevel);
+				gameState = "NORMAL";
+			}
+
+		} else if (gameState == "WIN") {
+
+			Graphics2D g2 = (Graphics2D) g;
+			g2.setColor(new Color(0, 0, 0, 100));
+			g2.fillRect(0, 0, WIDTH * SCALE, HEIGHT * SCALE);
+			g.setColor(Color.WHITE);
+			g.setFont(new Font("arial", Font.BOLD, 32));
+			g.drawString("PARECE QUE BONSONARO VENCEU AS ELEIÇÕES DO MESMO JEITO NÃO É?!?!?!", 17, 310);
+			g.setFont(new Font("arial", Font.BOLD, 35));
+			if (showMessageGameOver)
+				g.drawString(">Pressione 'ENTER' para tentar reiniciar.<", 260, 410);
+			
+			if (restartGame) {
+				curLevel=1;
+				gameStart(curLevel);
+				gameState = "NORMAL";
+			}
+
+		}
 		bs.show();
 	}
 
@@ -214,7 +277,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		System.out.println(e.getKeyCode());
+		//System.out.println(e.getKeyCode());
 //		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 //			System.out.println("direita");
 //		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
@@ -243,6 +306,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			player.shoot = true;
 		}
 
+		if (e.getKeyCode() == 10) {
+			restartGame = true;
+		}
+
 	}
 
 	@Override
@@ -261,6 +328,9 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		if (e.getKeyCode() == 88 || e.getKeyCode() == 17) {
 			player.shoot = false;
+		}
+		if (e.getKeyCode() == 10) {
+			restartGame = false;
 		}
 	}
 
@@ -306,4 +376,5 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	public static int getHEIGHT() {
 		return HEIGHT;
 	}
+
 }

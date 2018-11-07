@@ -151,8 +151,7 @@ public class Player extends Entity {
 			double angle = Math.atan2(my - (this.getY() + 8 - Camera.y), mx - (this.getX() + 8 - Camera.x));
 			double dx = Math.cos(angle), dy = Math.sin(angle);
 			int px = 8, py = 8;
-			
-			
+
 			if (direction == right_direction) {
 				px = 16;
 				py = 7;
@@ -170,15 +169,18 @@ public class Player extends Entity {
 				py = 12;
 			}
 
-			ammunition--;
+			ammunition++;
 			Bullet bullet = new Bullet(this.getX() + px, this.getY() + py, 3, 3, null, dx, dy);
 			Game.bullets.add(bullet);
 		}
 
 		if (life <= 0) {
 
-			Game.gameStart(Game.curLevel);
+			Game.gameState = "GAME_OVER";
+
 			return;
+			// RESETA GAME
+			// Game.gameStart(Game.curLevel);
 			// fecha o jogo
 			// System.exit(1);
 		}
