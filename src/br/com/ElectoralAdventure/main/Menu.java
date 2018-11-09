@@ -39,6 +39,10 @@ public class Menu {
 			} else if (options[currentOption] == "Novo Jogo") {
 				Game.gameStart(1);
 				Game.gameState = "NORMAL";
+			} else if (options[currentOption] == "Carregar") {
+				Game.gameState = "NORMAL";
+			} else if (options[currentOption] == "Salvar") {
+				Game.gameState = "NORMAL";
 			} else if (options[currentOption] == "Sair") {
 				System.exit(1);
 			}

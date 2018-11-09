@@ -5,6 +5,7 @@ import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 
 import br.com.ElectoralAdventure.main.Game;
+import br.com.ElectoralAdventure.main.Sound;
 import br.com.ElectoralAdventure.world.Camera;
 import br.com.ElectoralAdventure.world.World;
 
@@ -98,6 +99,8 @@ public class Bonsominion extends Entity {
 			} else {
 				// hit check
 				if (Game.random.nextInt(100) > 30) {
+					
+					Sound.hurtEffect.play();
 
 					Game.player.setLife((int) Game.player.getLife() - 1);
 					Game.player.isDamage = true;

@@ -184,15 +184,22 @@ public class Player extends Entity {
 			// fecha o jogo
 			// System.exit(1);
 		}
+		
+		updateCamera();
 
-		Camera.x = Camera.clamp(this.getX() - (Game.getWIDTH() / 2), 0, (World.WIDTH * 16) - Game.getWIDTH());
-		Camera.y = Camera.clamp(this.getY() - (Game.getHEIGHT() / 2), 0, (World.HEIGHT * 16) - Game.getHEIGHT());
 //		
 //		Camera.setX((Camera.clamp( this.getX() - (Game.getWIDTH()/2), 0, (World.WIDTH*16) - Game.getWIDTH())));
 //		Camera.setX((Camera.clamp( this.getY() - (Game.getHEIGHT()/2), 0, (World.HEIGHT*16) - Game.getHEIGHT())));
 
 //		Camera.setX( (this.getX() - (Game.getWIDTH()/2)));
 //		Camera.setY( (this.getY()- (Game.getHEIGHT()/2)));
+	}
+
+	public void updateCamera() {
+
+		Camera.x = Camera.clamp(this.getX() - (Game.getWIDTH() / 2), 0, (World.WIDTH * 16) - Game.getWIDTH());
+		Camera.y = Camera.clamp(this.getY() - (Game.getHEIGHT() / 2), 0, (World.HEIGHT * 16) - Game.getHEIGHT());
+		
 	}
 
 	private void checkCollisionAmmunition() {
