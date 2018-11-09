@@ -33,13 +33,13 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	private static final long serialVersionUID = 1L;
 
-	private final String GAME_VERSION = "Electoral Adventure v0.3.13";
+	public static final String GAME_VERSION = "Electoral Adventure v0.4.16";
 	private static JFrame frame;
 	private Thread thread;
 	private boolean isRunning;
 	private final static int WIDTH = 260;
 	private final static int HEIGHT = 140;
-	private final int SCALE = 5;
+	public final static int SCALE = 5;
 	private boolean restartGame = false;
 
 	public static int curLevel = 1;
@@ -63,9 +63,11 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 	public UserInterface ui;
 
-	public static String gameState = "NORMAL";
+	public static String gameState = "MENU";
 	private boolean showMessageGameOver = true;
 	private int framesGameOver = 0;
+	
+	public Menu menu;
 
 	public Game() {
 		random = new Random();
@@ -77,9 +79,10 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 		// init entities
 		ui = new UserInterface();
 		image = new BufferedImage(WIDTH, HEIGHT, BufferedImage.TYPE_INT_RGB);
-
 		// start game
 		gameStart(curLevel);
+		
+		menu = new Menu();
 	}
 
 	public static void gameStart(int level) {
@@ -140,24 +143,28 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			}
 
 			nextLevelCheck();
-		}else if (gameState == "GAME_OVER") {
+		} else if (gameState == "GAME_OVER") {
 			this.framesGameOver++;
 			if (this.framesGameOver == 30) {
-				this.framesGameOver=0;
-				if(showMessageGameOver)
+				this.framesGameOver = 0;
+				if (showMessageGameOver)
 					this.showMessageGameOver = false;
 				else
 					this.showMessageGameOver = true;
 			}
-		}else if (gameState == "WIN") {
+		} else if (gameState == "WIN") {
 			this.framesGameOver++;
 			if (this.framesGameOver == 30) {
-				this.framesGameOver=0;
-				if(showMessageGameOver)
+				this.framesGameOver = 0;
+				if (showMessageGameOver)
 					this.showMessageGameOver = false;
 				else
 					this.showMessageGameOver = true;
 			}
+		} else if (gameState == "MENU") {
+			
+			menu.tick();
+			
 		}
 	}
 
@@ -234,13 +241,15 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 			g.setFont(new Font("arial", Font.BOLD, 35));
 			if (showMessageGameOver)
 				g.drawString(">Pressione 'ENTER' para tentar reiniciar.<", 260, 410);
-			
+
 			if (restartGame) {
-				curLevel=1;
+				curLevel = 1;
 				gameStart(curLevel);
 				gameState = "NORMAL";
 			}
 
+		} else if (gameState == "MENU") {
+			menu.render(g);
 		}
 		bs.show();
 	}
@@ -277,7 +286,7 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 	@Override
 	public void keyPressed(KeyEvent e) {
 
-		//System.out.println(e.getKeyCode());
+		// System.out.println(e.getKeyCode());
 //		if (e.getKeyCode() == KeyEvent.VK_RIGHT || e.getKeyCode() == KeyEvent.VK_D) {
 //			System.out.println("direita");
 //		} else if (e.getKeyCode() == KeyEvent.VK_LEFT || e.getKeyCode() == KeyEvent.VK_A) {
@@ -298,8 +307,14 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		if (e.getKeyCode() == 87 || e.getKeyCode() == 38) {
 			player.setUp(true);
+			if (gameState == "MENU") {
+				menu.up = true;
+			}
 		} else if (e.getKeyCode() == 83 || e.getKeyCode() == 40) {
 			player.setDown(true);
+			if (gameState == "MENU") {
+				menu.down = true;
+			}
 		}
 
 		if (e.getKeyCode() == 88 || e.getKeyCode() == 17) {
@@ -308,6 +323,17 @@ public class Game extends Canvas implements Runnable, KeyListener, MouseListener
 
 		if (e.getKeyCode() == 10) {
 			restartGame = true;
+			if (gameState == "MENU") {
+				menu.enter = true;
+			}
+		}
+		
+		if (e.getKeyCode() == KeyEvent.VK_ESCAPE) {
+			if (gameState == "NORMAL") {
+				gameState = "MENU";				
+			} else {
+				gameState = "NORMAL";
+			}
 		}
 
 	}
